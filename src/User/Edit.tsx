@@ -6,9 +6,9 @@ const response = await fetchUtils.fetchJson(
   `${API_URL}/role`
 );
 const validateZipCode = regex(/^\d{2}-\d{3}$/, 'Kod pocztowy musi być w formacie XX-XXX');
-const validateNameUnique = async (enteredName) => {
+const validateNameUnique = async (enteredName, id) => {
   const response = await fetch(
-    `${API_URL}/user/usernameexist/${enteredName}`,
+    `${API_URL}/user/usernameexist/${enteredName}/${id}`,
     helpers.setToken()
   );
 
@@ -16,7 +16,7 @@ const validateNameUnique = async (enteredName) => {
   return error;
 };
 
-const UsernameValidator = async (value) => {
+const UsernameValidator = async (value, fields) => {
   if (!value) {
     return 'The age is required';
   }
@@ -24,7 +24,7 @@ const UsernameValidator = async (value) => {
   if (value.length < 3) {
     return 'Minimum chars is 3';
   }
-  if (await validateNameUnique(value)) {
+  if (await validateNameUnique(value, fields.id)) {
     return 'Username already used';
   }
   return undefined;

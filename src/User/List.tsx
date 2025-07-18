@@ -1,7 +1,6 @@
 // in src/users.tsx
 import { List, Datagrid, TextField, EmailField } from "react-admin";
-import * as helpers from '../helpers.ts'
-
+import * as helpers from "../helpers.ts";
 
 export const UserList = () => (
   <List>
