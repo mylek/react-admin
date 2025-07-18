@@ -5,6 +5,7 @@ import { UserEdit } from "./User/Edit.tsx";
 import { authProvider } from "./authProvider";
 import LoginPage from "./Auth/LoginPage.tsx";
 import ForgotPasswordPage from "./Auth/ForgotPasswordPage.tsx";
+import ResetPasswordPage from "./Auth/ResetPasswordPage.tsx";
 import { Route } from "react-router";
 
 export const App = () => (
@@ -15,11 +16,8 @@ export const App = () => (
   >
     <Resource name="user" list={UserList} edit={UserEdit} />
     <CustomRoutes>
-      <Route
-        path="/forgot-password"
-        element={<ForgotPasswordPage />}
-        noLayout
-      />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
     </CustomRoutes>
   </Admin>
 );

@@ -1,25 +1,36 @@
-import { Box, TextField, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, TextField } from "@mui/material";
 import { fetchUtils, useNotify } from "react-admin";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 
-const ForgotPasswordPage = () => {
-  const [email, setEmail] = useState("");
+
+const ResetPasswordPage = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const token = params.get("token");
+  const [password, setPassword] = useState("");
+  const [passwordReplace, setPasswordReplace] = useState("");
   const notify = useNotify();
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    if (password !== passwordReplace) {
+      notify("Hasła nie są takie same.", { type: "error" });
+      return;
+    }
+
     const API_URL = import.meta.env.VITE_JSON_SERVER_URL;
-    const data = { email };
+    const data = { password, token };
 
     try {
       const response = await fetchUtils.fetchJson(
-        `${API_URL}/auth/forgot-password`,
+        `${API_URL}/auth/forgot-password/change-password`,
         {
           method: "POST",
           body: JSON.stringify(data),
         },
       );
-
+      console.log(response);
       notify(response.json.message, {
         type: response.json.error ? "error" : "success",
       });
@@ -45,19 +56,28 @@ const ForgotPasswordPage = () => {
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          label="Email"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          label="Haslo"
+          type="password"
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          value={passwordReplace}
+          onChange={(e) => setPasswordReplace(e.target.value)}
+          label="Powtórz haslo"
+          type="password"
           fullWidth
           required
           margin="normal"
         />
         <Button type="submit" variant="contained" color="primary" fullWidth>
-          Resetuj hasło
+          Zmien hasło
         </Button>
       </form>
     </Box>
   );
 };
 
-export default ForgotPasswordPage;
+export default ResetPasswordPage;
