@@ -6,13 +6,12 @@ import {
   Title,
   ImageInput,
   ImageField,
-  Form,
   fetchUtils,
   useNotify,
 } from "react-admin";
 import { Card } from "@mui/material";
 import * as helpers from "../helpers.ts";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const API_URL = import.meta.env.VITE_JSON_SERVER_URL;
 const id = localStorage.getItem("id");
@@ -33,28 +32,41 @@ export const ProfilPage = () => {
   const [postcode, setPostcode] = useState(response.json.info.postcode);
 
   const postSave = async (data) => {
-    console.log(data);
-    const dataForm = {
-      info: {
-        firstname,
-        lastname,
-        street,
-        city,
-        postcode,
-      },
-    };
-
     try {
+      const base64 = await fetch(data.pictures.src)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          return new Promise((res) => {
+            reader.onloadend = () => {
+              res(reader.result);
+            };
+          });
+        });
+
       const options = {
         method: "POST",
-        body: JSON.stringify(dataForm),
+        body: JSON.stringify({
+          info: {
+            firstname,
+            lastname,
+            street,
+            city,
+            postcode,
+          },
+          image: {
+            fileName: data.pictures.title,
+            base64,
+          },
+        }),
       };
+
       console.log(options);
       const response = await fetchUtils.fetchJson(
         `${API_URL}/profil/${id}`,
         Object.assign(options, helpers.setToken()),
       );
-      console.log(response);
       notify(response.json.message, {
         type: response.json.error ? "error" : "success",
       });
@@ -82,53 +94,57 @@ export const ProfilPage = () => {
   );
 
   return (
-    <div style={{display: 'flex', justifyContent: 'center'}}>
+    <div style={{ display: "flex", justifyContent: "center" }}>
       <Title title="Profil" />
       <Card
         sx={{
           mt: 10,
-          width: '60%'
+          width: "60%",
         }}
       >
-        <SimpleForm record={record} toolbar={<UserEditToolbar />} onSubmit={postSave}>
-            <TextInput
-              source="firstname"
-              fullWidth
-              margin="normal"
-              onChange={(e) => setFirstName(e.target.value)}
-              label="First Name"
-            />
-            <TextInput
-              source="lastname"
-              fullWidth
-              margin="normal"
-              onChange={(e) => setLastName(e.target.value)}
-              label="Last Name"
-            />
-            <TextInput
-              source="street"
-              fullWidth
-              margin="normal"
-              onChange={(e) => setStreet(e.target.value)}
-              label="Street"
-            />
-            <TextInput
-              source="city"
-              fullWidth
-              margin="normal"
-              onChange={(e) => setCity(e.target.value)}
-              label="City"
-            />
-            <TextInput
-              source="postcode"
-              fullWidth
-              margin="normal"
-              onChange={(e) => setPostcode(e.target.value)}
-              label="Post Code"
-            />
-            <ImageInput source="pictures" label="Related pictures">
-              <ImageField source="src" title="title" />
-            </ImageInput>
+        <SimpleForm
+          record={record}
+          toolbar={<UserEditToolbar />}
+          onSubmit={postSave}
+        >
+          <TextInput
+            source="firstname"
+            fullWidth
+            margin="normal"
+            onChange={(e) => setFirstName(e.target.value)}
+            label="First Name"
+          />
+          <TextInput
+            source="lastname"
+            fullWidth
+            margin="normal"
+            onChange={(e) => setLastName(e.target.value)}
+            label="Last Name"
+          />
+          <TextInput
+            source="street"
+            fullWidth
+            margin="normal"
+            onChange={(e) => setStreet(e.target.value)}
+            label="Street"
+          />
+          <TextInput
+            source="city"
+            fullWidth
+            margin="normal"
+            onChange={(e) => setCity(e.target.value)}
+            label="City"
+          />
+          <TextInput
+            source="postcode"
+            fullWidth
+            margin="normal"
+            onChange={(e) => setPostcode(e.target.value)}
+            label="Post Code"
+          />
+          <ImageInput source="pictures" label="Related pictures">
+            <ImageField source="src" title="title" />
+          </ImageInput>
         </SimpleForm>
       </Card>
     </div>
