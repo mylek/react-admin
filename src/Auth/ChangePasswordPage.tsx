@@ -1,13 +1,9 @@
 import { Box, Button, Typography, TextField } from "@mui/material";
 import { fetchUtils, useNotify } from "react-admin";
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
-
+import * as helpers from "../helpers.ts";
 
 const ResetPasswordPage = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const token = params.get("token");
   const [password, setPassword] = useState("");
   const [passwordReplace, setPasswordReplace] = useState("");
   const notify = useNotify();
@@ -20,15 +16,16 @@ const ResetPasswordPage = () => {
     }
 
     const API_URL = import.meta.env.VITE_JSON_SERVER_URL;
-    const data = { password, token };
+    const data = { password };
 
     try {
+      const options = {
+        method: "POST",
+        body: JSON.stringify(data),
+      };
       const response = await fetchUtils.fetchJson(
-        `${API_URL}/auth/forgot-password/change-password`,
-        {
-          method: "POST",
-          body: JSON.stringify(data),
-        },
+        `${API_URL}/user/change-my-password`,
+        Object.assign(options, helpers.setToken()),
       );
       notify(response.json.message, {
         type: response.json.error ? "error" : "success",
@@ -51,7 +48,7 @@ const ResetPasswordPage = () => {
       height="100vh"
     >
       <Typography variant="h5" mb={2}>
-        Resetuj hasło
+        Zmien hasło
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField

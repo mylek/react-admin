@@ -25,7 +25,7 @@ export function setToken() {
   const tokenJwt = getCookie('jwt');
   const options = {};
   if (!options.headers) {
-    options.headers = new Headers({ Accept: 'application/json' });
+    options.headers = new Headers({ Accept: "application/json" });
   }
   const token = localStorage.getItem('token');
   options.headers.set('Authorization', `${tokenJwt}`);

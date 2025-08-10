@@ -16,11 +16,12 @@ export const authProvider = {
       throw new Error("Invalid credentials");
     }
 
-    const { token, role } = await response.json();
+    const { token, role, id } = await response.json();
 
     helpers.setCookie("jwt", token, 1);
     localStorage.setItem("auth", JSON.stringify({ token }));
     localStorage.setItem("role", JSON.stringify(btoa(role)));
+    localStorage.setItem("id", JSON.stringify(id));
   },
   async logout() {
     localStorage.removeItem("auth");

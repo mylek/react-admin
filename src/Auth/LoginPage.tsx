@@ -9,9 +9,6 @@ const LoginPage = () => (
       <Link component={RouterLink} to="/forgot-password">
         Forgot password?
       </Link>
-      <Link component={RouterLink} to="/reset-password">
-        Forgot password?
-      </Link>
     </Box>
   </Login>
 );

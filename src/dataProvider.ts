@@ -29,7 +29,6 @@ export const dataProvider: DataProvider = {
       method: "PUT",
       body: JSON.stringify(params.data),
     };
-    console.log(Object.assign(options, helpers.setToken()));
     const response = await fetchUtils.fetchJson(
       `${API_URL}/${resource}/${params.id}`,
       Object.assign(options, helpers.setToken()),
