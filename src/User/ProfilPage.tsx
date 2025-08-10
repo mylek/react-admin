@@ -32,37 +32,46 @@ export const ProfilPage = () => {
   const [postcode, setPostcode] = useState(response.json.info.postcode);
 
   const postSave = async (data) => {
+    const base64: string = "";
     try {
-      const base64 = await fetch(data.pictures.src)
-        .then((response) => response.blob())
-        .then((blob) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(blob);
-          return new Promise((res) => {
-            reader.onloadend = () => {
-              res(reader.result);
-            };
+      if (data.pictures !== undefined) {
+        const base64: string = await fetch(data.pictures.src)
+          .then((response) => response.blob())
+          .then((blob) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            return new Promise((res) => {
+              reader.onloadend = () => {
+                res(reader.result);
+              };
+            });
           });
-        });
+      }
+
+      const formData = {
+        info: {
+          firstname,
+          lastname,
+          street,
+          city,
+          postcode,
+        },
+      };
+
+      if (base64 !== "") {
+        formData.image = {
+          fileName: data.pictures.title,
+          base64,
+        };
+      }
 
       const options = {
         method: "POST",
         body: JSON.stringify({
-          info: {
-            firstname,
-            lastname,
-            street,
-            city,
-            postcode,
-          },
-          image: {
-            fileName: data.pictures.title,
-            base64,
-          },
+          formData,
         }),
       };
 
-      console.log(options);
       const response = await fetchUtils.fetchJson(
         `${API_URL}/profil/${id}`,
         Object.assign(options, helpers.setToken()),
@@ -71,6 +80,7 @@ export const ProfilPage = () => {
         type: response.json.error ? "error" : "success",
       });
     } catch (error) {
+      console.log(error);
       if (error instanceof Error) {
         notify(error.message, { type: "error" });
       } else {
@@ -89,7 +99,7 @@ export const ProfilPage = () => {
 
   const UserEditToolbar = (props) => (
     <Toolbar {...props}>
-      <SaveButton />
+      <SaveButton alwaysEnable />
     </Toolbar>
   );
 
