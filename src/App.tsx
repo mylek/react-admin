@@ -9,7 +9,7 @@ import ResetPasswordPage from "./Auth/ResetPasswordPage.tsx";
 import ChangePasswordPage from "./Auth/ChangePasswordPage.tsx";
 import { Route } from "react-router";
 import { MyLayout } from "./User/MyLayout.tsx";
-import { Test } from "./Test.tsx";
+import { ProfilPage } from "./User/ProfilPage.tsx";
 
 export const App = () => (
   <Admin
@@ -24,7 +24,7 @@ export const App = () => (
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/change-password" element={<ChangePasswordPage />} />
-      <Route path="/test" element={<Test />} />
+      <Route path="/profil" element={<ProfilPage />} />
     </CustomRoutes>
   </Admin>
 );
