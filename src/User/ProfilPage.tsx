@@ -67,9 +67,7 @@ export const ProfilPage = () => {
 
       const options = {
         method: "POST",
-        body: JSON.stringify({
-          formData,
-        }),
+        body: JSON.stringify(formData),
       };
 
       const response = await fetchUtils.fetchJson(
@@ -80,7 +78,6 @@ export const ProfilPage = () => {
         type: response.json.error ? "error" : "success",
       });
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
         notify(error.message, { type: "error" });
       } else {
