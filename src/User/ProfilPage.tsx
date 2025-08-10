@@ -23,7 +23,6 @@ const ProfilPage = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
     const data = {
       info: {
         firstname,

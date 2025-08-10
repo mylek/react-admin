@@ -9,7 +9,7 @@ import ResetPasswordPage from "./Auth/ResetPasswordPage.tsx";
 import ChangePasswordPage from "./Auth/ChangePasswordPage.tsx";
 import { Route } from "react-router";
 import { MyLayout } from "./User/MyLayout.tsx";
-import ProfilPage from "./User/ProfilPage.tsx";
+import { Test } from "./Test.tsx";
 
 export const App = () => (
   <Admin
@@ -19,11 +19,12 @@ export const App = () => (
     layout={MyLayout}
   >
     <Resource name="user" list={UserList} edit={UserEdit} />
+
     <CustomRoutes>
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/change-password" element={<ChangePasswordPage />} />
-      <Route path="/profil" element={<ProfilPage />} />
+      <Route path="/test" element={<Test />} />
     </CustomRoutes>
   </Admin>
 );
